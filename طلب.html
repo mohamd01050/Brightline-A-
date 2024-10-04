@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>انتظار</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffca6a; /* لون الخلفية للصفحة الانتظار */
+            position: relative;
+        }
+
+        .navbar {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #ff5722;
+            text-decoration: underline;
+        }
+
+        .spinner {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner span {
+            position: absolute;
+            width: 35px;
+            height: 7px;
+            background: #ffff;
+            animation: dominos 1s ease infinite;
+            box-shadow: 2px 2px 3px 0px black;
+        }
+
+        @keyframes dominos {
+            50% { opacity: 0.7; }
+            75% { transform: rotate(90deg); }
+            80% { opacity: 1; }
+        }
+
+        .request-container {
+            display: none;
+            text-align: center;
+            color: white;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        input, select, textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            background-color: #fff;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            background-color: #f7f7f7;
+            box-shadow: 0 0 5px #ff5722; /* تأثير إضافي عند التركيز */
+        }
+
+        button {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #e64a19;
+        }
+
+        .loading-message {
+            color: gray;
+            margin-top: 10px;
+        }
+
+        .social-icons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .social-icons a {
+            color: white;
+            margin: 0 10px;
+            font-size: 24px;
+            transition: color 0.3s;
+            border: 2px solid transparent;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .social-icons a:hover {
+            color: #ff5722;
+            border-color: #ff5722;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html">الرئيسية</a>
+        <a href="contact.html">اتصل بنا</a>
+    </div>
+
+    <div class="spinner">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="request-container" id="request-container">
+        <h1>معلومات الخدمة</h1>
+        <form onsubmit="sendToWhatsApp(event)">
+            <label for="name">الاسم:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">البريد الإلكتروني:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="country-code">الدولة:</label>
+            <select id="country-code" name="country-code" required>
+                <option value="">اختر الدولة</option>
+                <option value="+20">🇪🇬 مصر</option>
+                <option value="+966">🇸🇦 السعودية</option>
+                <option value="+971">🇦🇪 الإمارات</option>
+                <option value="+962">🇯🇴 الأردن</option>
+                <option value="+964">🇮🇶 العراق</option>
+                <option value="+965">🇰🇼 الكويت</option>
+                <option value="+1">🇺🇸 الولايات المتحدة</option>
+                <option value="+44">🇬🇧 المملكة المتحدة</option>
+                <option value="+33">🇫🇷 فرنسا</option>
+                <option value="+49">🇩🇪 ألمانيا</option>
+                <option value="+61">🇦🇺 أستراليا</option>
+            </select>
+
+            <label for="phone">رقم الهاتف:</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <label for="service">اختر الخدمة:</label>
+            <select id="service" name="service" required>
+                <option value="">اختر الخدمة</option>
+                <option value="خدمة 1">تصميم مواقع.1</option>
+                <option value="خدمة 2">حجز الدومين 2</option>
+                <option value="خدمة 3"> تصميم الجرافيك 3</option>
+                <option value="خدمة 3"> الطباعة اوفسيت 3</option>
+                <option value="خدمة 3">التهيئة لمحركات 3</option>
+                <option value="خدمة 3">  شهادات الامان SSL  3</option>
+            </select>
+
+            <label for="service-description">وصف الخدمة:</label>
+            <textarea id="service-description" name="service-description" rows="3" required></textarea>
+
+            <button type="submit">إرسال</button>
+        </form>
+
+        <div id="loading-message" class="loading-message" style="display:none;">
+            جارٍ معالجة الطلب، يرجى الانتظار قليلاً...
+        </div>
+
+        <div class="social-icons">
+            <a href="https://www.facebook.com/profile.php?id=61566247660327&mibextid=ZbWKwL" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://wa.me/201551875383" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            
+            
+        </div>
+    </div>
+
+    <script>
+        // الانتقال إلى صفحة "اطلب الآن" بعد 3 ثوانٍ
+        setTimeout(function() {
+            document.querySelector('.spinner').style.display = 'none';
+            document.getElementById('request-container').style.display = 'block';
+        }, 3000);
+
+        function sendToWhatsApp(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const countryCode = document.getElementById('country-code').value;
+            const phone = document.getElementById('phone').value;
+            const service = document.getElementById('service').value;
+            const serviceDescription = document.getElementById('service-description').value;
+            const message = `اسم: ${name}\nالبريد الإلكتروني: ${email}\nالدولة: ${countryCode}\nرقم الهاتف: ${phone}\nالخدمة: ${service}\nوصف الخدمة: ${serviceDescription}`;
+            const whatsappURL = `https://wa.me/${countryCode}${phone}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+</body>
+</html>
